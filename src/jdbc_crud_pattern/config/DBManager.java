@@ -16,7 +16,7 @@ public class DBManager {
 
     public static Connection getConnection() {
         try {
-            Class.forName("jdbc.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost/fiap";
             String username = "root";
             String password = "root";

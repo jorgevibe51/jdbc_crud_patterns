@@ -4,7 +4,7 @@
  */
 package jdbc_crud_pattern.beans;
 
-import java.util.Date;
+import java.sql.*;
 
 /**
  *
