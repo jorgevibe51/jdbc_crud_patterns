@@ -20,27 +20,26 @@ public class Jdbc_crud_pattern {
      */
     public static void main(String[] args) {
         ProdutoDaoImpl dao = new ProdutoDaoImpl();
-        try (Connection conn = DBManager.getConnection()){
-            
-            //salvando um produto
-            Produto produto = new Produto(0, "Batata", 7.50, Date.valueOf("2022-10-10"));
-            //dao.save(produto);
-            
-            //listagem dos produtos
-            for(Produto prod:dao.findAll()){
-                System.out.println(prod);
-            }
-            
-            //busca produto por codigo
-            System.out.println("buscar produto por codigo:");
-            Produto prod = dao.findById(7);
+
+        //salvando um produto
+        Produto produto = new Produto(0, "Batata", 7.50, Date.valueOf("2022-10-10"));
+        //dao.save(produto);
+
+        //listagem dos produtos
+        for (Produto prod : dao.findAll()) {
             System.out.println(prod);
-            
-            //delete um registro por id
-            dao.delete(7);
-            
-        }catch(SQLException e){
-            e.printStackTrace();
         }
+
+        //busca produto por codigo
+        System.out.println("buscar produto por codigo:");
+        Produto prod = dao.findById(1);
+        System.out.println(prod);
+        
+        //alterar produto
+        prod.setNome("Cebola");
+        dao.update(prod);
+
+        //delete um registro por id
+        dao.delete(7);
     }
 }

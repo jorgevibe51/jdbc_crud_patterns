@@ -27,7 +27,15 @@ public class ProdutoDaoImpl implements ProdutoDAO{
             pstm.setString(1, bean.getNome());
             pstm.setDouble(2, bean.getValor());
             pstm.setDate(3, bean.getDataValidade());
-            pstm.executeUpdate();
+            
+            try {
+                conn.setAutoCommit(false);
+                pstm.executeUpdate();
+                conn.commit();
+                
+            } catch (SQLException e) {
+                conn.rollback();
+            }
             
         }catch(SQLException e){
             e.printStackTrace();
@@ -66,6 +74,34 @@ public class ProdutoDaoImpl implements ProdutoDAO{
             e.printStackTrace();
         }
         return produto;
+    }
+    
+
+    @Override
+    public void update(Produto bean) {
+        try(Connection conn = DBManager.getInstance().getConnection();
+            PreparedStatement pstm = conn.prepareStatement("""
+                                                           UPDATE produto set nome = ?, valor = ?, datavalidade = ?
+                                                           WHERE codigo = ?
+                                                           """)){
+            
+            pstm.setString(1, bean.getNome());
+            pstm.setDouble(2, bean.getValor());
+            pstm.setDate(3, bean.getDataValidade());
+            pstm.setInt(4, bean.getCodigo());
+            
+            try {
+                conn.setAutoCommit(false);
+                pstm.executeUpdate();
+                conn.commit();
+                
+            } catch (SQLException e) {
+                conn.rollback();
+            }
+            
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 
     @Override

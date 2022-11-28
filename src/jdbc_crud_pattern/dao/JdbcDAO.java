@@ -18,6 +18,8 @@ public interface JdbcDAO<T, U> {
     
     T findById(U id);
     
+    void update(T bean);
+    
     void delete(U id);
     
 }
