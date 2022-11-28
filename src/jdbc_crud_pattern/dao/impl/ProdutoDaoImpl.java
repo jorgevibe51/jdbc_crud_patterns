@@ -9,6 +9,7 @@ import jdbc_crud_pattern.beans.Produto;
 import jdbc_crud_pattern.config.DBManager;
 import jdbc_crud_pattern.dao.ProdutoDAO;
 import java.sql.*;
+import java.util.LinkedList;
 /**
  *
  * @author Jorge
@@ -35,16 +36,47 @@ public class ProdutoDaoImpl implements ProdutoDAO{
 
     @Override
     public List<Produto> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<Produto> produtos = null;
+        try (Connection conn = DBManager.getConnection();
+             Statement stm = conn.createStatement()){
+            produtos = new LinkedList<>();
+            ResultSet rs = stm.executeQuery("SELECT codigo, nome, valor, datavalidade FROM produto");
+            while (rs.next()){
+                produtos.add(new Produto(rs.getInt(1), rs.getString(2), rs.getDouble(3), rs.getDate(4)));
+            }
+            
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return produtos;
     }
 
     @Override
     public Produto findById(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Produto produto = null;
+        try (Connection conn = DBManager.getConnection();
+             PreparedStatement pstm = conn.prepareStatement("SELECT codigo, nome, valor, datavalidade  FROM produto WHERE codigo = ?")){
+            pstm.setInt(1, id);
+            
+            ResultSet rs = pstm.executeQuery();
+            rs.next();
+            produto = new Produto(rs.getInt(1), rs.getString(2), rs.getDouble(3), rs.getDate(4));
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return produto;
     }
 
     @Override
     public void delete(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try (Connection conn = DBManager.getConnection();
+             PreparedStatement pstm = conn.prepareStatement("DELETE FROM produto WHERE codigo = ?")){
+            pstm.setInt(1, id);
+            if (pstm.executeUpdate()==0)
+                System.out.println("Err: não encontrado registro para deletar");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
