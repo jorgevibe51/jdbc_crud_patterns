@@ -18,7 +18,7 @@ public class ProdutoDaoImpl implements ProdutoDAO{
 
     @Override
     public void save(Produto bean) {
-        try(Connection conn = DBManager.getConnection();
+        try(Connection conn = DBManager.getInstance().getConnection();
             PreparedStatement pstm = conn.prepareStatement("""
                                                            INSERT INTO produto(nome, valor, datavalidade)
                                                                   VALUES (?, ?, ?)
@@ -37,7 +37,7 @@ public class ProdutoDaoImpl implements ProdutoDAO{
     @Override
     public List<Produto> findAll() {
         List<Produto> produtos = null;
-        try (Connection conn = DBManager.getConnection();
+        try (Connection conn = DBManager.getInstance().getConnection();
              Statement stm = conn.createStatement()){
             produtos = new LinkedList<>();
             ResultSet rs = stm.executeQuery("SELECT codigo, nome, valor, datavalidade FROM produto");
@@ -54,7 +54,7 @@ public class ProdutoDaoImpl implements ProdutoDAO{
     @Override
     public Produto findById(Integer id) {
         Produto produto = null;
-        try (Connection conn = DBManager.getConnection();
+        try (Connection conn = DBManager.getInstance().getConnection();
              PreparedStatement pstm = conn.prepareStatement("SELECT codigo, nome, valor, datavalidade  FROM produto WHERE codigo = ?")){
             pstm.setInt(1, id);
             
@@ -70,7 +70,7 @@ public class ProdutoDaoImpl implements ProdutoDAO{
 
     @Override
     public void delete(Integer id) {
-        try (Connection conn = DBManager.getConnection();
+        try (Connection conn = DBManager.getInstance().getConnection();
              PreparedStatement pstm = conn.prepareStatement("DELETE FROM produto WHERE codigo = ?")){
             pstm.setInt(1, id);
             if (pstm.executeUpdate()==0)

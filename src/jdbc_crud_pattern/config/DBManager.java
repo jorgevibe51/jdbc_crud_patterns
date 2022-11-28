@@ -12,9 +12,21 @@ import java.sql.*;
  */
 public class DBManager {
 
-    static Connection connection = null;
+    //private static Connection connection = null;
+    private static DBManager instance;
+    
+    private DBManager(){
+    }
+    
+    //singleton
+    public static DBManager getInstance(){
+        if (instance == null)
+            instance = new DBManager();
+        return instance;
+    }
 
-    public static Connection getConnection() {
+    public Connection getConnection() {
+        Connection connection = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost/fiap";
